@@ -8,19 +8,20 @@ var Grid = require('gridfs');
 mongo.MongoClient.connect(yourMongoURI, function(err, db) {
   var gfs = Grid(db, mongo);
 
-  var f = gfs.fromFile('./example.txt', {});
+  var f = gfs.fromFile({}, './example.txt');
   console.log(f.id);
   f.save(function (err, file) {
     console.log('saved file');
+    gfs.readFile({_id: f.id}, function (err, data) {
+      console.log('read file: ' + data.toString());
+    });
   });
 
   gfs.writeFile({}, 'hello', function (err, file) {
     console.log('wrote to ' + file._id);
   });
+});
 
-  gfs.readFile({_id: file.id}, function (err, data) {
-    console.log('read file:' + data.toString());
-  });
 ```
 
 This is an extension of [gridfs-stream](https://github.com/aheckmann/gridfs-stream), building on its stream interface to provide additional utility methods. As such, huge props to [@aheckmann](https://github.com/aheckmann) and the rest of the contributors to gridfs-stream.
