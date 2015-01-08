@@ -61,5 +61,5 @@ You'll need `mocha`, `eslint`, and mongo to run the tests; they use the `gridfs-
 
 [npm-image]: https://img.shields.io/npm/v/gridfs.svg?style=flat
 [npm-url]: https://www.npmjs.com/package/gridfs
-[travis-image]: https://img.shields.io/travis/lewisjellis/gridfs.svg?style=flat
-[travis-url]: https://travis-ci.org/lewisjellis/gridfs
+[travis-image]: https://img.shields.io/travis/LewisJEllis/gridfs.svg?style=flat
+[travis-url]: https://travis-ci.org/LewisJEllis/gridfs
