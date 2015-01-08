@@ -1,5 +1,8 @@
-# gridfs
+# Gridfs
 The GridFS wrapper module for Node.js.
+
+  [![NPM Version][npm-image]][npm-url]
+  [![Build Status][travis-image]][travis-url]
 
 ```javascript
 var mongo = require('mongodb');
@@ -55,3 +58,8 @@ More thorough docs will be written once the API stabilizes and the library is mo
 Pull requests are welcome. Guidelines: make sure `npm test` passes.
 
 You'll need `mocha`, `eslint`, and mongo to run the tests; they use the `gridfs-mocha-test` database on the local mongo server.
+
+[npm-image]: https://img.shields.io/npm/v/gridfs.svg?style=flat
+[npm-url]: https://www.npmjs.com/package/gridfs
+[travis-image]: https://img.shields.io/travis/lewisjellis/gridfs.svg?style=flat
+[travis-url]: https://travis-ci.org/lewisjellis/gridfs

@@ -1,7 +1,7 @@
 {
   "name": "gridfs",
-  "version": "0.0.1",
-  "description": "GridFS utilities for Node.js",
+  "version": "0.0.2",
+  "description": "The GridFS wrapper module for Node.js.",
   "main": "index.js",
   "scripts": {
     "test": "eslint index.js test/*.js && mocha"
