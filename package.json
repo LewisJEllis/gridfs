@@ -19,11 +19,11 @@
     "wrapper"
   ],
   "dependencies": {
-    "gridfs-stream": "0.5.3"
+    "gridfs-stream": "^0.5.3"
   },
   "devDependencies": {
     "chai": "1.10.0",
-    "mongodb": "1.4.x"
+    "mongodb": "^2.0.31"
   },
   "author": "Lewis J Ellis",
   "license": "MIT",
