@@ -6,12 +6,17 @@ function streamToBuffer(source, cb) {
   var chunks = [];
   var buffer = new stream.Writable();
 
-  buffer._write = function (chunk) {
+  buffer._write = function (chunk, enc, cb) {
     chunks.push(chunk);
+    cb();
   };
 
   source.on('end', function () {
     cb(null, Buffer.concat(chunks));
+  });
+
+  source.on('error', function (err) {
+    cb(err);
   });
 
   source.pipe(buffer);
