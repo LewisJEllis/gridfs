@@ -33,6 +33,10 @@ Grid.prototype.fromFile = function (options, source) {
         return cb(null, file);
       });
 
+      ws.on('error', function (err) {
+        cb(err);
+      });
+
       rs.pipe(ws);
     }
   };
@@ -56,6 +60,10 @@ Grid.prototype.readFile = function (options, cb) {
 Grid.prototype.writeFile = function (options, data, cb) {
   data = typeof data === 'object' ? data.toString() : data;
   var ws = this.createWriteStream(options);
+
+  ws.on('error', function (err) {
+    cb(err);
+  });
 
   ws.on('close', function (file) {
     cb(null, file);
