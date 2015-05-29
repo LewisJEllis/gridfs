@@ -1,16 +1,16 @@
 # Gridfs
 The GridFS wrapper module for Node.js.
 
+  [![NPM Version][npm-image]][npm-url]
+  [![Build Status][travis-image]][travis-url]
+
 A fork of [LewisJEllis/gridfs](https://github.com/LewisJEllis/gridfs) with the following changes:
 
  * `error` events handled
  * `stream.Writable` implemented correctly
  * `fromFile` api consistient with `toFile` (both return the stream now)
- * standard formatting
+ * [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
-  [![NPM Version][npm-image]][npm-url]
-  [![Build Status][travis-image]][travis-url]
-  [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
 ```javascript
 var mongo = require('mongodb')
