@@ -1,29 +1,36 @@
 # Gridfs
 The GridFS wrapper module for Node.js.
 
+A fork of [LewisJEllis/gridfs](https://github.com/LewisJEllis/gridfs) with the following changes:
+
+ * `error` events handled
+ * `stream.Writable` implemented correctly
+ * `fromFile` api consistient with `toFile` (both return the stream now)
+ * standard formatting
+
   [![NPM Version][npm-image]][npm-url]
   [![Build Status][travis-image]][travis-url]
+  [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
 ```javascript
-var mongo = require('mongodb');
-var Grid = require('gridfs');
+var mongo = require('mongodb')
+var Grid = require('gridfs')
 
 mongo.MongoClient.connect(yourMongoURI, function(err, db) {
-  var gfs = Grid(db, mongo);
+  var gfs = Grid(db, mongo)
 
-  var f = gfs.fromFile({}, './example.txt');
-  console.log(f.id);
-  f.save(function (err, file) {
-    console.log('saved file');
+  var f = gfs.fromFile({}, './example.txt', function (err, file) {
+    console.log('saved file')
     gfs.readFile({_id: f.id}, function (err, data) {
-      console.log('read file: ' + data.toString());
-    });
-  });
+      console.log('read file: ' + data.toString())
+    })
+  })
+  console.log(f.id)
 
   gfs.writeFile({}, 'hello', function (err, file) {
-    console.log('wrote to ' + file._id);
-  });
-});
+    console.log('wrote to ' + file._id)
+  })
+})
 
 ```
 
@@ -46,7 +53,7 @@ See the example above, and [gridfs-stream](https://github.com/aheckmann/gridfs-s
 gfs.readFile(options, cb(err, buffer))
 gfs.writeFile(options, data, cb(err, file))
 gfs.toFile(options, target, cb(err))
-gfs.fromFile(options, source) -> {id, save(cb(err, file))}
+gfs.fromFile(options, source, cb(err, file))
 ```
 `options` fields are the same as `options` fields in [gridfs-stream](https://github.com/aheckmann/gridfs-stream); they're just passed along to the stream constructors.
 
