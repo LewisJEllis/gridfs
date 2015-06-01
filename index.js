@@ -46,7 +46,7 @@ Grid.prototype.toFile = function (options, target, cb) {
   var rs = this.createReadStream(options);
   var ws = typeof target === 'string' ? fs.createWriteStream(target) : target;
 
-  rs.on('end', function () {
+  ws.on('close', function () {
     cb(null);
   });
 
