@@ -6,12 +6,17 @@ function streamToBuffer(source, cb) {
   var chunks = [];
   var buffer = new stream.Writable();
 
-  buffer._write = function (chunk) {
+  buffer._write = function (chunk, enc, cb) {
     chunks.push(chunk);
+    cb();
   };
 
   source.on('end', function () {
     cb(null, Buffer.concat(chunks));
+  });
+
+  source.on('error', function (err) {
+    cb(err);
   });
 
   source.pipe(buffer);
@@ -26,6 +31,10 @@ Grid.prototype.fromFile = function (options, source) {
     save: function (cb) {
       ws.on('close', function (file) {
         return cb(null, file);
+      });
+
+      ws.on('error', function (err) {
+        cb(err);
       });
 
       rs.pipe(ws);
@@ -51,6 +60,10 @@ Grid.prototype.readFile = function (options, cb) {
 Grid.prototype.writeFile = function (options, data, cb) {
   data = typeof data === 'object' ? data.toString() : data;
   var ws = this.createWriteStream(options);
+
+  ws.on('error', function (err) {
+    cb(err);
+  });
 
   ws.on('close', function (file) {
     cb(null, file);
