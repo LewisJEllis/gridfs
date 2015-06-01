@@ -6,9 +6,9 @@ function streamToBuffer(source, cb) {
   var chunks = [];
   var buffer = new stream.Writable();
 
-  buffer._write = function (chunk, enc, cb) {
+  buffer._write = function (chunk, enc, done) {
     chunks.push(chunk);
-    cb();
+    done();
   };
 
   source.on('end', function () {
