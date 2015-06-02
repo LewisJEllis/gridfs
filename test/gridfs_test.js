@@ -33,8 +33,7 @@ describe('#gridfs', function () {
   it('does a fromFile - readFile round trip', function (done) {
     var filePath = './test/sample.txt';
     var contents = fs.readFileSync(filePath).toString();
-    var f = gfs.fromFile({}, fs.createReadStream(filePath));
-    f.save(function (err1, file) {
+    gfs.fromFile({}, fs.createReadStream(filePath), function (err1, file) {
       assert.isNull(err1);
       assert.strictEqual(contents.length, file.length);
       gfs.readFile({_id: file._id}, function (err2, data) {

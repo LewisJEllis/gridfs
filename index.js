@@ -15,31 +15,22 @@ function streamToBuffer(source, cb) {
     cb(null, Buffer.concat(chunks));
   });
 
-  source.on('error', function (err) {
-    cb(err);
-  });
+  source.on('error', cb);
 
   source.pipe(buffer);
 }
 
-Grid.prototype.fromFile = function (options, source) {
+Grid.prototype.fromFile = function (options, source, cb) {
   var ws = this.createWriteStream(options);
   var rs = typeof source === 'string' ? fs.createReadStream(source) : source;
 
-  return {
-    id: ws.id,
-    save: function (cb) {
-      ws.on('close', function (file) {
-        return cb(null, file);
-      });
+  ws.on('close', function (file) {
+    return cb(null, file);
+  });
 
-      ws.on('error', function (err) {
-        cb(err);
-      });
+  ws.on('error', cb);
 
-      rs.pipe(ws);
-    }
-  };
+  rs.pipe(ws);
 };
 
 Grid.prototype.toFile = function (options, target, cb) {
@@ -49,6 +40,8 @@ Grid.prototype.toFile = function (options, target, cb) {
   ws.on('close', function () {
     cb(null);
   });
+
+  ws.on('error', cb);
 
   rs.pipe(ws);
 };
@@ -61,13 +54,11 @@ Grid.prototype.writeFile = function (options, data, cb) {
   data = data instanceof Buffer ? data : data.toString();
   var ws = this.createWriteStream(options);
 
-  ws.on('error', function (err) {
-    cb(err);
-  });
-
   ws.on('close', function (file) {
     cb(null, file);
   });
+
+  ws.on('error', cb);
 
   ws.end(data);
 };
