@@ -5,31 +5,32 @@ The GridFS wrapper module for Node.js.
   [![Build Status][travis-image]][travis-url]
 
 ```javascript
+var fs = require('fs');
 var mongo = require('mongodb');
 var Grid = require('gridfs');
 
 mongo.MongoClient.connect(yourMongoURI, function(err, db) {
   var gfs = Grid(db, mongo);
 
-  var f = gfs.fromFile({}, './example.txt');
-  console.log(f.id);
-  f.save(function (err, file) {
-    console.log('saved file');
-    gfs.readFile({_id: f.id}, function (err, data) {
-      console.log('read file: ' + data.toString());
+  gfs.fromFile({}, './example.txt', function (err, file) {
+    console.log('saved example.txt to file ' + file._id);
+    gfs.readFile({_id: file._id}, function (err, data) {
+      console.log('read file ' + file._id + ': ' + data.toString());
     });
   });
 
-  gfs.writeFile({}, 'hello', function (err, file) {
-    console.log('wrote to ' + file._id);
+  var contents = 'world';
+  gfs.writeFile({}, contents, function (err, file) {
+    console.log('wrote "' + contents + '" to file ' + file._id);
+    gfs.toFile({_id: file._id}, './out.txt', function (err) {
+      var fileContents = fs.readFileSync('./out.txt').toString();
+      console.log('wrote file %s to out.txt: %s', file._id, fileContents);
+    });
   });
 });
-
 ```
 
-This is an extension of [gridfs-stream](https://github.com/aheckmann/gridfs-stream), building on its stream interface to provide additional utility methods. As such, huge props to [@aheckmann](https://github.com/aheckmann) and the rest of the contributors to gridfs-stream.
-
-This library is currently quite incomplete, but the plan is primarily to mirror a selection of functions from the core `fs` API.
+This is a simple extension of the excellent [gridfs-stream](https://github.com/aheckmann/gridfs-stream) library, building on its stream interface to provide additional utility methods. As such, huge props to [@aheckmann](https://github.com/aheckmann) and the rest of the contributors to gridfs-stream.
 
 `gridfs` can be used as a drop-in replacement for `gridfs-stream`, as it exports the same object as `gridfs-stream`, just with additional methods available.
 
@@ -38,21 +39,34 @@ This library is currently quite incomplete, but the plan is primarily to mirror 
 npm install gridfs
 ```
 
-# Usage
-See the example above, and [gridfs-stream](https://github.com/aheckmann/gridfs-stream).
-
 # Methods
-```
-gfs.readFile(options, cb(err, buffer))
-gfs.writeFile(options, data, cb(err, file))
-gfs.toFile(options, target, cb(err))
-gfs.fromFile(options, source) -> {id, save(cb(err, file))}
-```
-`options` fields are the same as `options` fields in [gridfs-stream](https://github.com/aheckmann/gridfs-stream); they're just passed along to the stream constructors.
 
-`target` can be a file path or writable stream; likewise for `source`, but readable.
+All `options` fields are the same as `options` fields in [gridfs-stream](https://github.com/aheckmann/gridfs-stream); they're just passed along to the stream constructors.
 
-More thorough docs will be written once the API stabilizes and the library is more complete. The source is simple enough for anyone familiar with `gridfs-stream` to read.
+#### gfs.readFile(options, cb(err, buffer))
+Get the contents of the GridFS file specified by `options`.
+
+#### gfs.writeFile(options, data, cb(err, file))
+Write `data` to the GridFS file specified by `options`.
+
+`data` can be a String or a Buffer.
+#### gfs.toFile(options, target, cb(err))
+Read from the GridFS file specified by `options` and write its contents to `target`.
+
+`target` can be a file path or writable stream.
+
+#### gfs.fromFile(options, source, cb(err, file))
+Read from `source` and write its contents to the GridFS file specified by `options`.
+
+`source` can be a file path or readable stream.
+
+#### Notes on other potentially desirable `fs` methods
+- `fs.stat` - use [gfs.findOne](https://github.com/aheckmann/gridfs-stream#accessing-file-metadata)
+- `fs.unlink` - use [gfs.remove](https://github.com/aheckmann/gridfs-stream#removing-files)
+- `fs.exists` - use [gfs.exist](https://github.com/aheckmann/gridfs-stream#check-if-file-exists)
+- `fs.createReadStream` - use [gfs.createReadStream](https://github.com/aheckmann/gridfs-stream#createreadstream)
+- `fs.createWriteStream` - use [gfs.createWriteStream](https://github.com/aheckmann/gridfs-stream#createwritestream)
+- `fs.appendFile` - not currently feasible due to risk of corruption from parallel writes; see [MongoDB driver 2.0 notes](http://mongodb.github.io/node-mongodb-native/2.0/meta/changes-from-1.0/)
 
 # Contributing
 Pull requests are welcome. Guidelines: make sure `npm test` passes.
