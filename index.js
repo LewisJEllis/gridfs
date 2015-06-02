@@ -58,7 +58,7 @@ Grid.prototype.readFile = function (options, cb) {
 };
 
 Grid.prototype.writeFile = function (options, data, cb) {
-  data = data.toString();
+  data = data instanceof Buffer ? data : data.toString();
   var ws = this.createWriteStream(options);
 
   ws.on('error', function (err) {
