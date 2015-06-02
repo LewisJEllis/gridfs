@@ -2,6 +2,8 @@
 ==================
 
  * changes toFile API as suggested in [#5](https://github.com/LewisJEllis/gridfs/pull/4)
+ * makes toFile return its writestream
+ * adds gfs.list method
  * documentation rewrite, add history.md
 
 0.1.0 / 06-01-2015
