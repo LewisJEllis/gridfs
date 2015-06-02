@@ -31,6 +31,7 @@ Grid.prototype.fromFile = function (options, source, cb) {
   ws.on('error', cb);
 
   rs.pipe(ws);
+  return ws;
 };
 
 Grid.prototype.toFile = function (options, target, cb) {

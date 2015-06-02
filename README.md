@@ -67,6 +67,8 @@ Read from `source` and write its contents to the GridFS file specified by `optio
 
 `source` can be a file path or readable stream.
 
+Returns the [GridFS writeStream](https://github.com/aheckmann/gridfs-stream#createwritestream) used for writing the file.
+
 #### gfs.listFiles(cb(err, filenames))
 Gets the list of files stored in GridFS, using [GridStore.list](http://mongodb.github.io/node-mongodb-native/api-generated/gridstore.html#gridstore-list).
 
