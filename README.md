@@ -12,7 +12,8 @@ var Grid = require('gridfs');
 mongo.MongoClient.connect(yourMongoURI, function(err, db) {
   var gfs = Grid(db, mongo);
 
-  gfs.fromFile({}, './example.txt', function (err, file) {
+  var source = './example.txt';
+  gfs.fromFile({filename: 'hello.txt'}, source, function (err, file) {
     console.log('saved example.txt to file ' + file._id);
     gfs.readFile({_id: file._id}, function (err, data) {
       console.log('read file ' + file._id + ': ' + data.toString());
@@ -20,13 +21,19 @@ mongo.MongoClient.connect(yourMongoURI, function(err, db) {
   });
 
   var contents = 'world';
-  gfs.writeFile({}, contents, function (err, file) {
+  gfs.writeFile({filename: 'world.txt'}, contents, function (err, file) {
     console.log('wrote "' + contents + '" to file ' + file._id);
     gfs.toFile({_id: file._id}, './out.txt', function (err) {
       var fileContents = fs.readFileSync('./out.txt').toString();
       console.log('wrote file %s to out.txt: %s', file._id, fileContents);
     });
   });
+
+  setTimeout(function () {
+    gfs.list(function (err, filenames) {
+      console.log('filenames: ' + filenames); // hello.txt, world.txt
+    });
+  }, 100);
 });
 ```
 
@@ -59,6 +66,9 @@ Read from the GridFS file specified by `options` and write its contents to `targ
 Read from `source` and write its contents to the GridFS file specified by `options`.
 
 `source` can be a file path or readable stream.
+
+#### gfs.listFiles(cb(err, filenames))
+Gets the list of files stored in GridFS, using [GridStore.list](http://mongodb.github.io/node-mongodb-native/api-generated/gridstore.html#gridstore-list).
 
 #### Notes on other potentially desirable `fs` methods
 - `fs.stat` - use [gfs.findOne](https://github.com/aheckmann/gridfs-stream#accessing-file-metadata)

@@ -63,4 +63,8 @@ Grid.prototype.writeFile = function (options, data, cb) {
   ws.end(data);
 };
 
+Grid.prototype.list = function (cb) {
+  return this.mongo.GridStore.list(this.db, cb);
+};
+
 module.exports = exports = Grid;

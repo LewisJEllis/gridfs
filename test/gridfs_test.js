@@ -58,4 +58,26 @@ describe('#gridfs', function () {
     });
   });
 
+  it('reads an empty file list', function (done) {
+    gfs.list(function (err, filenames) {
+      assert.isNull(err);
+      assert.strictEqual(filenames.length, 0);
+      done();
+    });
+  });
+
+  it('reads a non-empty file list', function (done) {
+    var filename = 'hello.txt';
+    gfs.writeFile({filename: filename}, 'hello', function (err1, file) {
+      assert.isNull(err1);
+      gfs.list(function (err2, filenames) {
+        assert.isNull(err2);
+        assert.strictEqual(filenames.length, 1);
+        assert.strictEqual(filenames[0], filename);
+        assert.strictEqual(filenames[0], file.filename);
+        done();
+      });
+    });
+  });
+
 });
