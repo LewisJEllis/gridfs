@@ -30,10 +30,11 @@ describe('#gridfs', function () {
     });
   });
 
-  it('does a fromFile - readFile round trip', function (done) {
+  it('does a fromFile - readFile round trip (path source)', function (done) {
     var filePath = './test/sample.txt';
+    var source = filePath;
     var contents = fs.readFileSync(filePath).toString();
-    gfs.fromFile({}, fs.createReadStream(filePath), function (err1, file) {
+    gfs.fromFile({}, source, function (err1, file) {
       assert.isNull(err1);
       assert.strictEqual(contents.length, file.length);
       gfs.readFile({_id: file._id}, function (err2, data) {
@@ -44,14 +45,60 @@ describe('#gridfs', function () {
     });
   });
 
-  it('does a writeFile - toFile round trip', function (done) {
+  it('does a fromFile - readFile round trip (stream source)', function (done) {
+    var filePath = './test/sample.txt';
+    var source = fs.createReadStream(filePath);
+    var contents = fs.readFileSync(filePath).toString();
+    gfs.fromFile({}, source, function (err1, file) {
+      assert.isNull(err1);
+      assert.strictEqual(contents.length, file.length);
+      gfs.readFile({_id: file._id}, function (err2, data) {
+        assert.isNull(err2);
+        assert.strictEqual(data.toString(), contents);
+        done();
+      });
+    });
+  });
+
+  it('does a writeFile - toFile round trip (path target)', function (done) {
     var filePath = './test/output.txt';
+    var target = filePath;
     var contents = 'hello\n';
     gfs.writeFile({}, contents, function (err1, file) {
       assert.isNull(err1);
-      gfs.toFile({_id: file._id}, filePath, function (err2) {
+      gfs.toFile({_id: file._id}, target, function (err2) {
         assert.isNull(err2);
         assert.strictEqual(contents, fs.readFileSync(filePath).toString());
+        fs.unlinkSync(filePath);
+        done();
+      });
+    });
+  });
+
+  it('does a writeFile - toFile round trip (stream target)', function (done) {
+    var filePath = './test/output.txt';
+    var target = fs.createWriteStream(filePath);
+    var contents = 'hello\n';
+    gfs.writeFile({}, contents, function (err1, file) {
+      assert.isNull(err1);
+      gfs.toFile({_id: file._id}, target, function (err2) {
+        assert.isNull(err2);
+        assert.strictEqual(contents, fs.readFileSync(filePath).toString());
+        fs.unlinkSync(filePath);
+        done();
+      });
+    });
+  });
+
+  it('does a writeFile - toFile round trip (buffer contents)', function (done) {
+    var filePath = './test/output.txt';
+    var target = filePath;
+    var contents = new Buffer('hello\n');
+    gfs.writeFile({}, contents, function (err1, file) {
+      assert.isNull(err1);
+      gfs.toFile({_id: file._id}, target, function (err2) {
+        assert.isNull(err2);
+        assert.strictEqual(contents.toString(), fs.readFileSync(filePath).toString());
         fs.unlinkSync(filePath);
         done();
       });
