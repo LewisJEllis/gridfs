@@ -3,6 +3,7 @@ The GridFS wrapper module for Node.js.
 
   [![NPM Version][npm-image]][npm-url]
   [![Build Status][travis-image]][travis-url]
+  [![Coverage Status][coveralls-image]][coveralls-url]
 
 ```javascript
 var fs = require('fs');
@@ -88,3 +89,5 @@ You'll need `mocha`, `eslint`, and mongo to run the tests; they use the `gridfs-
 [npm-url]: https://www.npmjs.com/package/gridfs
 [travis-image]: https://img.shields.io/travis/LewisJEllis/gridfs.svg?style=flat
 [travis-url]: https://travis-ci.org/LewisJEllis/gridfs
+[coveralls-image]: https://coveralls.io/repos/LewisJEllis/gridfs/badge.svg?branch=master
+[coveralls-url]: https://coveralls.io/r/LewisJEllis/gridfs?branch=master
