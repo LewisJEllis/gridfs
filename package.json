@@ -22,8 +22,10 @@
     "gridfs-stream": "^1.1.1"
   },
   "devDependencies": {
-    "chai": "2",
-    "mongodb": "2"
+    "chai": "^2.3.0",
+    "coveralls": "^2.11.2",
+    "mocha": "^2.2.5",
+    "mongodb": "^2.0.33"
   },
   "author": "Lewis J Ellis",
   "license": "MIT",
